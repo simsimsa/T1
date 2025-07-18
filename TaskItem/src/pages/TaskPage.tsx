@@ -1,34 +1,38 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { Container } from '@mui/material';
-import TaskDetails from '../components/TaskDetails/TaskDetails';
-import { useTasks } from '../Context/TaskContext';
-import type { Task } from '../types/types';
+import { Container, CircularProgress, Alert, Box } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { useTaskStore } from '../entities/task/model/task.store'
+import { TaskForm } from '../shared/ui/task-form/task-form';
 
-const TaskPage = () => {
+export const TaskPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const { tasks, addTask, updateTask } = useTasks();
+  const { getTaskById } = useTaskStore();
+  
+  const task = id ? getTaskById(id) : null;
+  const isNewTask = !id;
 
-  const existingTask = id ? tasks.find(task => task.id === id) : undefined;
-
-  const handleSave = (taskData: Omit<Task, 'id'> & { id?: string }) => {
-    if (taskData.id) {
-      updateTask(taskData.id, taskData as Task);
-    } else {
-      addTask(taskData);
-    }
-    navigate('/');
-  };
+  if (!isNewTask && !task) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Alert severity="error" sx={{ mt: 2 }}>
+          Task not found
+        </Alert>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <TaskDetails
-        task={existingTask || {}} 
-        onSave={handleSave}
-        onCancel={() => navigate('/')}
-      />
+      {!isNewTask && !task ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <TaskForm 
+          task={task || undefined} 
+          onSave={() => {}} 
+          onCancel={() => {}} 
+        />
+      )}
     </Container>
   );
 };
-
-export default TaskPage;
