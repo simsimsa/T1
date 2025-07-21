@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  TextField,
-  Button,
-  Stack,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  TextareaAutosize,
-} from '@mui/material';
+import { TextField, Button, Stack, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import type {
   Task,
   TaskCategory,
@@ -74,25 +65,32 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
           fullWidth
           error={errors.title}
           helperText={errors.title ? 'Title is required' : ''}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+
+        <TextField
+          label="Description"
+          variant="outlined"
+          fullWidth
+          multiline
+          minRows={3}
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          sx={{
+            mt: 2,
+            '& .MuiInputLabel-root': {
+              transform: 'translate(14px, -9px) scale(0.75)',
+            },
+          }}
         />
 
         <FormControl fullWidth>
-          <InputLabel>Description</InputLabel>
-          <TextareaAutosize
-            minRows={3}
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            style={{
-              width: '100%',
-              padding: '8px',
-              fontFamily: 'inherit',
-              fontSize: 'inherit',
-            }}
-          />
-        </FormControl>
-
-        <FormControl fullWidth>
-          <InputLabel>Category</InputLabel>
+          <InputLabel shrink>Category</InputLabel>
           <Select
             value={formData.category}
             onChange={(e) =>
@@ -109,7 +107,7 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
         </FormControl>
 
         <FormControl fullWidth>
-          <InputLabel>Status</InputLabel>
+          <InputLabel shrink>Status</InputLabel>
           <Select
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value as Task['status'] })}
@@ -124,7 +122,7 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
         </FormControl>
 
         <FormControl fullWidth>
-          <InputLabel>Priority</InputLabel>
+          <InputLabel shrink>Priority</InputLabel>
           <Select
             value={formData.priority}
             onChange={(e) =>
