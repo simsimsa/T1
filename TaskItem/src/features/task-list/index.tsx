@@ -7,11 +7,12 @@ import { TaskSort } from './ui/task-sort';
 
 export const TaskList = () => {
   const [search, setSearch] = useState('');
-  const {getFilteredAndSortedTasks} = useTaskStore();
+  const { getFilteredAndSortedTasks } = useTaskStore();
 
-  const getTasks = getFilteredAndSortedTasks().filter(task =>
-    task.title.toLowerCase().includes(search.toLowerCase()) ||
-    task.description?.toLowerCase().includes(search.toLowerCase())
+  const getTasks = getFilteredAndSortedTasks().filter(
+    (task) =>
+      task.title.toLowerCase().includes(search.toLowerCase()) ||
+      task.description?.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -24,14 +25,16 @@ export const TaskList = () => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <TaskFilters/>
-      <TaskSort/>
-      <Box sx={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-        gap: 3,
-      }}>
-        {getTasks.map(task => (
+      <TaskFilters />
+      <TaskSort />
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+          gap: 3,
+        }}
+      >
+        {getTasks.map((task) => (
           <TaskItem key={task.id} task={task} />
         ))}
       </Box>

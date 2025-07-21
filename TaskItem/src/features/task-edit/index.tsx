@@ -8,7 +8,7 @@ export const TaskEditPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getTaskById, updateTask } = useTaskStore();
-  
+
   const task = id ? getTaskById(id) : undefined;
 
   const handleSubmit = (taskData: Omit<Task, 'id' | 'createdAt'>) => {
@@ -24,11 +24,7 @@ export const TaskEditPage = () => {
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <TaskForm 
-        task={task} 
-        onSave={handleSubmit} 
-        onCancel={() => navigate('/')} 
-      />
+      <TaskForm task={task} onSave={handleSubmit} onCancel={() => navigate('/')} />
     </Container>
   );
 };

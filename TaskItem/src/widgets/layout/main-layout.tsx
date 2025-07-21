@@ -6,15 +6,17 @@ export const MainLayout = () => {
   return (
     <>
       <CssBaseline />
-      <Box sx={{ 
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        bgcolor: 'background.default'
-      }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+          bgcolor: 'background.default',
+        }}
+      >
         <Header />
-        
-        <Container 
+
+        <Container
           component="main"
           maxWidth="lg"
           sx={{
@@ -27,7 +29,6 @@ export const MainLayout = () => {
         >
           <Outlet />
         </Container>
-        
       </Box>
     </>
   );

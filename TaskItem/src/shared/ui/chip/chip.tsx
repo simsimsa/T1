@@ -11,28 +11,28 @@ interface ChipProps {
 
 const typeStyles: Record<ChipType, Record<string, MuiChipProps['color']>> = {
   category: {
-    'Bug': 'error',
-    'Feature': 'success',
-    'Documentation': 'info',
-    'Refactor': 'warning',
-    'Test': 'secondary'
+    Bug: 'error',
+    Feature: 'success',
+    Documentation: 'info',
+    Refactor: 'warning',
+    Test: 'secondary',
   },
   status: {
     'To Do': 'default',
     'In Progress': 'primary',
-    'Done': 'success'
+    Done: 'success',
   },
   priority: {
-    'Low': 'info',
-    'Medium': 'warning',
-    'High': 'error'
-  }
+    Low: 'info',
+    Medium: 'warning',
+    High: 'error',
+  },
 };
 
 const getChipProps = (type: ChipType, value: string): MuiChipProps => {
   const color = typeStyles[type]?.[value] || 'default';
   const variant = type === 'status' ? 'outlined' : 'filled';
-  
+
   return {
     color,
     variant,
@@ -40,18 +40,15 @@ const getChipProps = (type: ChipType, value: string): MuiChipProps => {
     sx: {
       fontWeight: 500,
       textTransform: 'capitalize',
-      ...(type === 'priority' ? { 
-        minWidth: 80 
-      } : {})
-    }
+      ...(type === 'priority'
+        ? {
+            minWidth: 80,
+          }
+        : {}),
+    },
   };
 };
 
 export const Chip = ({ type, value, size = 'small' }: ChipProps) => {
-  return (
-    <MuiChip 
-      size={size}
-      {...getChipProps(type, value)}
-    />
-  );
+  return <MuiChip size={size} {...getChipProps(type, value)} />;
 };

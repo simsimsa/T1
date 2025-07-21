@@ -15,10 +15,7 @@ export const TaskCreatePage = () => {
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <TaskForm 
-        onSave={handleSubmit} 
-        onCancel={() => navigate('/')} 
-      />
+      <TaskForm onSave={handleSubmit} onCancel={() => navigate('/')} />
     </Container>
   );
 };

@@ -1,17 +1,22 @@
 import { useState, useEffect } from 'react';
-import { 
-  TextField, 
-  Button, 
-  Stack, 
-  Select, 
-  MenuItem, 
-  InputLabel, 
+import {
+  TextField,
+  Button,
+  Stack,
+  Select,
+  MenuItem,
+  InputLabel,
   FormControl,
-  TextareaAutosize
+  TextareaAutosize,
 } from '@mui/material';
-import type { Task, TaskCategory, TaskPriority, TaskStatus } from '../../../entities/task/model/types';
+import type {
+  Task,
+  TaskCategory,
+  TaskPriority,
+  TaskStatus,
+} from '../../../entities/task/model/types';
 import { CATEGORIES, STATUSES, PRIORITIES } from '../../utils/constants';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 interface TaskFormProps {
   task?: Partial<Task>;
@@ -26,7 +31,7 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
     category: 'Feature',
     status: 'To Do',
     priority: 'Medium',
-    ...task
+    ...task,
   });
 
   const [errors, setErrors] = useState({
@@ -47,7 +52,7 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim()) {
       setErrors({ ...errors, title: true });
       return;
@@ -63,12 +68,12 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
           label="Title*"
           value={formData.title}
           onChange={(e) => {
-            setFormData({...formData, title: e.target.value});
+            setFormData({ ...formData, title: e.target.value });
             setErrors({ ...errors, title: false });
           }}
           fullWidth
           error={errors.title}
-          helperText={errors.title ? "Title is required" : ""}
+          helperText={errors.title ? 'Title is required' : ''}
         />
 
         <FormControl fullWidth>
@@ -76,12 +81,12 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
           <TextareaAutosize
             minRows={3}
             value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-            style={{ 
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            style={{
               width: '100%',
               padding: '8px',
               fontFamily: 'inherit',
-              fontSize: 'inherit'
+              fontSize: 'inherit',
             }}
           />
         </FormControl>
@@ -90,11 +95,15 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
           <InputLabel>Category</InputLabel>
           <Select
             value={formData.category}
-            onChange={(e) => setFormData({...formData, category: e.target.value as Task['category']})}
+            onChange={(e) =>
+              setFormData({ ...formData, category: e.target.value as Task['category'] })
+            }
             label="Category"
           >
             {CATEGORIES.map((cat: TaskCategory) => (
-              <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+              <MenuItem key={cat} value={cat}>
+                {cat}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -103,11 +112,13 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
           <InputLabel>Status</InputLabel>
           <Select
             value={formData.status}
-            onChange={(e) => setFormData({...formData, status: e.target.value as Task['status']})}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value as Task['status'] })}
             label="Status"
           >
             {STATUSES.map((status: TaskStatus) => (
-              <MenuItem key={status} value={status}>{status}</MenuItem>
+              <MenuItem key={status} value={status}>
+                {status}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -116,30 +127,30 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
           <InputLabel>Priority</InputLabel>
           <Select
             value={formData.priority}
-            onChange={(e) => setFormData({...formData, priority: e.target.value as Task['priority']})}
+            onChange={(e) =>
+              setFormData({ ...formData, priority: e.target.value as Task['priority'] })
+            }
             label="Priority"
           >
             {PRIORITIES.map((priority: TaskPriority) => (
-              <MenuItem key={priority} value={priority}>{priority}</MenuItem>
+              <MenuItem key={priority} value={priority}>
+                {priority}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
 
         <Stack direction="row" spacing={2} justifyContent="flex-end">
-          <Button 
+          <Button
             component={Link}
-            variant='contained'
+            variant="contained"
             to="/"
             onClick={onCancel}
             sx={{ width: 120 }}
           >
             Cancel
           </Button>
-          <Button 
-            type="submit" 
-            variant="contained"
-            sx={{ width: 120 }}
-          >
+          <Button type="submit" variant="contained" sx={{ width: 120 }}>
             Save
           </Button>
         </Stack>

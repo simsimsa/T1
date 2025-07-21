@@ -10,41 +10,43 @@ interface TaskItemProps {
 }
 
 export const TaskItem = ({ task }: TaskItemProps) => {
-
-  const {deleteTask} = useTaskStore();
+  const { deleteTask } = useTaskStore();
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     deleteTask(task.id);
-  }
+  };
 
   return (
-    <Card sx={{ 
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      position: 'relative',
-      transition: 'transform 0.3s',
-      '&:hover': {
-        transform: 'translateY(-4px)',
-        boxShadow: 3
-      }
-    }}>
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        transition: 'transform 0.3s',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: 3,
+        },
+      }}
+    >
       <IconButton
-        aria-label='delete'
+        aria-label="delete"
         onClick={handleDelete}
         sx={{
-          position:'absolute',
+          position: 'absolute',
           right: 8,
           top: 8,
           color: 'error.main',
           '&:hover': {
-            backgroundColor: 'rgba(255, 0, 0, 0.3)'
-          }
-        }}>
-          <DeleteIcon fontSize='small' />
-        </IconButton>
+            backgroundColor: 'rgba(255, 0, 0, 0.3)',
+          },
+        }}
+      >
+        <DeleteIcon fontSize="small" />
+      </IconButton>
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="h6" gutterBottom>
           {task.title}
@@ -69,12 +71,7 @@ export const TaskItem = ({ task }: TaskItemProps) => {
         )}
       </CardContent>
       <CardContent>
-        <Button
-          component={Link}
-          to={`/task/${task.id}`}
-          variant="contained"
-          fullWidth
-        >
+        <Button component={Link} to={`/task/${task.id}`} variant="contained" fullWidth>
           Edit
         </Button>
       </CardContent>

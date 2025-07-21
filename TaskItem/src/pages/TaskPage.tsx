@@ -1,12 +1,12 @@
 import { Container, CircularProgress, Alert, Box } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useTaskStore } from '../entities/task/model/task.store'
+import { useTaskStore } from '../entities/task/model/task.store';
 import { TaskForm } from '../shared/ui/task-form/task-form';
 
 export const TaskPage = () => {
   const { id } = useParams();
   const { getTaskById } = useTaskStore();
-  
+
   const task = id ? getTaskById(id) : null;
   const isNewTask = !id;
 
@@ -27,11 +27,7 @@ export const TaskPage = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <TaskForm 
-          task={task || undefined} 
-          onSave={() => {}} 
-          onCancel={() => {}} 
-        />
+        <TaskForm task={task || undefined} onSave={() => {}} onCancel={() => {}} />
       )}
     </Container>
   );

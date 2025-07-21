@@ -9,13 +9,13 @@ interface TaskStore {
   updateTask: (id: string, task: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   getTaskById: (id: string) => Task | undefined;
-  resetTasks: ()=>void;
+  resetTasks: () => void;
   filters: FilterValues;
   sortField: SortField;
   sortOrder: SortOrder;
   setFilters: (filters: FilterValues) => void;
-  setSort: (field: SortField, order: SortOrder) =>void;
-  getFilteredAndSortedTasks: ()=>Task[];
+  setSort: (field: SortField, order: SortOrder) => void;
+  getFilteredAndSortedTasks: () => Task[];
 }
 
 export const useTaskStore = create<TaskStore>()(
@@ -25,32 +25,33 @@ export const useTaskStore = create<TaskStore>()(
       filters: {},
       sortField: 'createdAt',
       sortOrder: 'desc',
-      setFilters: (filters) => set({filters}),
-      setSort: (field, order) => set({sortField: field, sortOrder: order}),
-      getFilteredAndSortedTasks: () =>{
-        const {tasks, filters, sortField, sortOrder} = get();
-        const filtered = tasks.filter(task => {
-            return (
+      setFilters: (filters) => set({ filters }),
+      setSort: (field, order) => set({ sortField: field, sortOrder: order }),
+      getFilteredAndSortedTasks: () => {
+        const { tasks, filters, sortField, sortOrder } = get();
+        const filtered = tasks.filter((task) => {
+          return (
             (!filters.status || task.status === filters.status) &&
             (!filters.category || task.category === filters.category) &&
             (!filters.priority || task.priority === filters.priority)
-            );
+          );
         });
         filtered.sort((a, b) => {
-            if (sortField === 'priority') {
-                const priorityOrder = {'High': 3, 'Medium': 2, 'Low': 1};
-                return sortOrder === 'asc' ? priorityOrder[a.priority] - priorityOrder[b.priority]
-                : priorityOrder[b.priority] - priorityOrder[a.priority];
-            }
-            if (sortField === 'createdAt'){
-                return sortOrder === 'asc'
-                ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-                : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-            }
+          if (sortField === 'priority') {
+            const priorityOrder = { High: 3, Medium: 2, Low: 1 };
             return sortOrder === 'asc'
+              ? priorityOrder[a.priority] - priorityOrder[b.priority]
+              : priorityOrder[b.priority] - priorityOrder[a.priority];
+          }
+          if (sortField === 'createdAt') {
+            return sortOrder === 'asc'
+              ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+              : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          }
+          return sortOrder === 'asc'
             ? a[sortField].localeCompare(b[sortField])
             : b[sortField].localeCompare(a[sortField]);
-        })
+        });
         return filtered;
       },
 
@@ -67,7 +68,7 @@ export const useTaskStore = create<TaskStore>()(
           tasks: state.tasks.map((task) =>
             task.id === id
               ? { ...task, ...updatedTask, updatedAt: new Date().toISOString() }
-              : task
+              : task,
           ),
         }));
       },
@@ -79,7 +80,7 @@ export const useTaskStore = create<TaskStore>()(
       getTaskById: (id) => {
         return get().tasks.find((task) => task.id === id);
       },
-      resetTasks: ()=> set({tasks: [] })
+      resetTasks: () => set({ tasks: [] }),
     }),
     {
       name: 'task-storage',
@@ -87,8 +88,8 @@ export const useTaskStore = create<TaskStore>()(
         tasks: state.tasks,
         filters: state.filters,
         sortField: state.sortField,
-        sortOrder: state.sortOrder
-      })
-    }
-  )
+        sortOrder: state.sortOrder,
+      }),
+    },
+  ),
 );

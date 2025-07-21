@@ -4,7 +4,7 @@ import { useTaskStore } from '../../entities/task/model/task.store';
 
 export const Header = () => {
   const location = useLocation();
-  const { resetTasks } = useTaskStore(); 
+  const { resetTasks } = useTaskStore();
 
   const handleRefresh = () => {
     resetTasks();
@@ -13,30 +13,21 @@ export const Header = () => {
   return (
     <AppBar position="fixed" elevation={1}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography 
-          variant="h6" 
-          component={Link} 
+        <Typography
+          variant="h6"
+          component={Link}
           to="/"
           sx={{ textDecoration: 'none', color: 'inherit' }}
         >
           Task Manager
         </Typography>
-        
+
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button
-            color="inherit"
-            onClick={handleRefresh}
-            disabled={location.pathname !== '/'}
-          >
+          <Button color="inherit" onClick={handleRefresh} disabled={location.pathname !== '/'}>
             Refresh
           </Button>
-          
-          <Button
-            component={Link}
-            to="/task/new"
-            variant="contained"
-            size="small"
-          >
+
+          <Button component={Link} to="/task/new" variant="contained" size="small">
             New Task
           </Button>
         </Box>
