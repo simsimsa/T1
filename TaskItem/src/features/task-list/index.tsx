@@ -1,15 +1,36 @@
-import { TextField, Box } from '@mui/material';
+import { TextField, Box, CircularProgress } from '@mui/material';
 import { TaskItem } from '../../entities/task/ui/TaskItem';
 import { useTaskStore } from '../../entities/task/model/task.store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TaskFilters } from './ui/task-filters';
 import { TaskSort } from './ui/task-sort';
 
 export const TaskList = () => {
   const [search, setSearch] = useState('');
-  const { getFilteredAndSortedTasks } = useTaskStore();
+  const { getFilteredAndSortedTasks, fetchTasks, loading, error } = useTaskStore();
+  const [init, setInit] = useState(false);
 
-  const getTasks = getFilteredAndSortedTasks().filter(
+  useEffect(() => {
+    const loadTasks = async () => {
+      await fetchTasks();
+      setInit(true);
+    };
+    loadTasks();
+  }, [fetchTasks]);
+
+  if (!init || loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return <Box sx={{ p: 2, color: 'error.main' }}>Error loading tasks: {error}</Box>;
+  }
+
+  const tasks = getFilteredAndSortedTasks().filter(
     (task) =>
       task.title.toLowerCase().includes(search.toLowerCase()) ||
       task.description?.toLowerCase().includes(search.toLowerCase()),
@@ -34,9 +55,11 @@ export const TaskList = () => {
           gap: 3,
         }}
       >
-        {getTasks.map((task) => (
-          <TaskItem key={task.id} task={task} />
-        ))}
+        {tasks.length > 0 ? (
+          tasks.map((task) => <TaskItem key={task.id} task={task} />)
+        ) : (
+          <Box sx={{ p: 2 }}> No tasks found </Box>
+        )}
       </Box>
     </Box>
   );

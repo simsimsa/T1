@@ -1,14 +1,23 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { v4 as uuidv4 } from 'uuid';
 import type { FilterValues, SortField, SortOrder, Task } from './types';
+import {
+  createTask,
+  deleteTask,
+  fetchTasks,
+  getTaskById,
+  updateTask,
+} from '../../../shared/api/appwrite';
 
 interface TaskStore {
+  error: string | null;
+  loading: boolean;
   tasks: Task[];
-  createTask: (task: Omit<Task, 'id' | 'createdAt'>) => void;
-  updateTask: (id: string, task: Partial<Task>) => void;
-  deleteTask: (id: string) => void;
-  getTaskById: (id: string) => Task | undefined;
+  fetchTasks: () => Promise<void>;
+  createTask: (task: Omit<Task, 'id' | 'createdAt'>) => Promise<void>;
+  updateTask: (id: string, task: Partial<Task>) => Promise<void>;
+  deleteTask: (id: string) => Promise<void>;
+  getTaskById: (id: string) => Promise<Task | undefined>;
   resetTasks: () => void;
   filters: FilterValues;
   sortField: SortField;
@@ -25,6 +34,18 @@ export const useTaskStore = create<TaskStore>()(
       filters: {},
       sortField: 'createdAt',
       sortOrder: 'desc',
+      loading: false,
+      error: null,
+
+      fetchTasks: async () => {
+        set({ loading: true, error: null });
+        try {
+          const tasks = await fetchTasks();
+          set({ tasks, loading: false });
+        } catch (e) {
+          set({ error: `Failed to fetch tasks: ${e}`, loading: false });
+        }
+      },
       setFilters: (filters) => set({ filters }),
       setSort: (field, order) => set({ sortField: field, sortOrder: order }),
       getFilteredAndSortedTasks: () => {
@@ -55,37 +76,55 @@ export const useTaskStore = create<TaskStore>()(
         return filtered;
       },
 
-      createTask: (task) => {
-        const newTask: Task = {
-          ...task,
-          id: uuidv4(),
-          createdAt: new Date().toISOString(),
-        };
-        set((state) => ({ tasks: [...state.tasks, newTask] }));
+      createTask: async (task) => {
+        set({ loading: true });
+        try {
+          const newTask = await createTask(task);
+          set((state) => ({
+            tasks: [...state.tasks, newTask],
+            loading: false,
+          }));
+        } catch (error) {
+          set({ error: `Failed to create task: ${error}`, loading: false });
+        }
       },
-      updateTask: (id, updatedTask) => {
-        set((state) => ({
-          tasks: state.tasks.map((task) =>
-            task.id === id
-              ? { ...task, ...updatedTask, updatedAt: new Date().toISOString() }
-              : task,
-          ),
-        }));
+      updateTask: async (id, updatedTask) => {
+        set({ loading: true });
+        try {
+          const task = await updateTask(id, updatedTask);
+          set((state) => ({
+            tasks: state.tasks.map((t) => (t.id === id ? { ...t, ...task } : t)),
+            loading: false,
+          }));
+        } catch (error) {
+          set({ error: `Failed to update task: ${error}`, loading: false });
+        }
       },
-      deleteTask: (id) => {
-        set((state) => ({
-          tasks: state.tasks.filter((task) => task.id !== id),
-        }));
+      deleteTask: async (id) => {
+        set({ loading: true });
+        try {
+          await deleteTask(id);
+          set((state) => ({
+            tasks: state.tasks.filter((task) => task.id !== id),
+            loading: false,
+          }));
+        } catch (error) {
+          set({ error: `Failed to delete task: ${error}`, loading: false });
+        }
       },
-      getTaskById: (id) => {
-        return get().tasks.find((task) => task.id === id);
+      getTaskById: async (id) => {
+        try {
+          return await getTaskById(id);
+        } catch (error) {
+          set({ error: `Failed to get task: ${error}` });
+          return undefined;
+        }
       },
       resetTasks: () => set({ tasks: [] }),
     }),
     {
       name: 'task-storage',
       partialize: (state) => ({
-        tasks: state.tasks,
         filters: state.filters,
         sortField: state.sortField,
         sortOrder: state.sortOrder,

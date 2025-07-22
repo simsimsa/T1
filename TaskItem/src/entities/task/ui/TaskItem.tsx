@@ -2,7 +2,7 @@ import { Card, CardContent, Button, Typography, Stack, IconButton } from '@mui/m
 import { Link } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Chip } from '../../../shared/ui/chip/chip';
-import type { Task } from '../model/types';
+import { formatStatus, type Task } from '../model/types';
 import { useTaskStore } from '../model/task.store';
 
 interface TaskItemProps {
@@ -57,7 +57,7 @@ export const TaskItem = ({ task }: TaskItemProps) => {
           </Typography>
         )}
         <Stack direction="row" spacing={1} sx={{ mb: 2, flexWrap: 'wrap', gap: 1 }}>
-          <Chip type="status" value={task.status} />
+          <Chip type="status" value={formatStatus(task.status)} />
           <Chip type="category" value={task.category} />
           <Chip type="priority" value={task.priority} />
         </Stack>

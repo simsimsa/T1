@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { TextField, Button, Stack, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
-import type {
-  Task,
-  TaskCategory,
-  TaskPriority,
-  TaskStatus,
+import {
+  formatStatus,
+  type Task,
+  type TaskCategory,
+  type TaskPriority,
+  type TaskStatus,
 } from '../../../entities/task/model/types';
 import { CATEGORIES, STATUSES, PRIORITIES } from '../../utils/constants';
 import { Link } from 'react-router-dom';
@@ -20,7 +21,7 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
     title: '',
     description: '',
     category: 'Feature',
-    status: 'To Do',
+    status: 'To_Do',
     priority: 'Medium',
     ...task,
   });
@@ -35,7 +36,7 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
         title: task.title || '',
         description: task.description || '',
         category: task.category || 'Feature',
-        status: task.status || 'To Do',
+        status: task.status || 'To_Do',
         priority: task.priority || 'Medium',
       });
     }
@@ -115,7 +116,7 @@ export const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
           >
             {STATUSES.map((status: TaskStatus) => (
               <MenuItem key={status} value={status}>
-                {status}
+                {formatStatus(status)}
               </MenuItem>
             ))}
           </Select>

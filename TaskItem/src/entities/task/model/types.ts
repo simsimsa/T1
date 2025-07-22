@@ -1,5 +1,5 @@
 export type TaskCategory = 'Bug' | 'Feature' | 'Documentation' | 'Refactor' | 'Test';
-export type TaskStatus = 'To Do' | 'In Progress' | 'Done';
+export type TaskStatus = 'To_Do' | 'In_Progress' | 'Done';
 export type TaskPriority = 'Low' | 'Medium' | 'High';
 
 export type FilterValues = {
@@ -23,5 +23,14 @@ export interface Task {
 }
 
 export const CATEGORIES: TaskCategory[] = ['Bug', 'Feature', 'Documentation', 'Refactor', 'Test'];
-export const STATUSES: TaskStatus[] = ['To Do', 'In Progress', 'Done'];
+export const STATUSES: TaskStatus[] = ['To_Do', 'In_Progress', 'Done'];
 export const PRIORITIES: TaskPriority[] = ['Low', 'Medium', 'High'];
+
+export const formatStatus = (status: TaskStatus): string => {
+  const statusMap: Record<TaskStatus, string> = {
+    To_Do: 'To Do',
+    In_Progress: 'In Progress',
+    Done: 'Done',
+  };
+  return statusMap[status] || status;
+};

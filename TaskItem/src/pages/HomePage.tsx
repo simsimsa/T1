@@ -1,8 +1,22 @@
 import { Container, Typography, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { TaskList } from '../features/task-list';
+import { useEffect } from 'react';
+import { fetchTasks } from '../shared/api/appwrite';
 
 export const HomePage = () => {
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const tasks = await fetchTasks();
+        console.log('Tasks from Appwrite:', tasks);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
+    };
+
+    loadTasks();
+  }, []);
   return (
     <Container maxWidth="lg">
       <Typography

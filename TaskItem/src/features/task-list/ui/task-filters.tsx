@@ -1,7 +1,7 @@
 import { Box, Chip, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useTaskStore } from '../../../entities/task/model/task.store';
 import { STATUSES } from '../../../shared/utils/constants';
-import { CATEGORIES } from '../../../entities/task/model/types';
+import { CATEGORIES, formatStatus } from '../../../entities/task/model/types';
 
 export const TaskFilters = () => {
   const { filters, setFilters } = useTaskStore();
@@ -28,7 +28,7 @@ export const TaskFilters = () => {
           <MenuItem value="">All statuses</MenuItem>
           {STATUSES.map((status) => (
             <MenuItem key={status} value={status}>
-              {status}
+              {formatStatus(status)}
             </MenuItem>
           ))}
         </Select>

@@ -5,7 +5,7 @@ type ChipType = 'category' | 'status' | 'priority';
 
 interface ChipProps {
   type: ChipType;
-  value: TaskCategory | TaskStatus | TaskPriority;
+  value: TaskCategory | TaskStatus | TaskPriority | string;
   size?: MuiChipProps['size'];
 }
 
@@ -18,8 +18,8 @@ const typeStyles: Record<ChipType, Record<string, MuiChipProps['color']>> = {
     Test: 'secondary',
   },
   status: {
-    'To Do': 'default',
-    'In Progress': 'primary',
+    To_Do: 'default',
+    In_Progress: 'primary',
     Done: 'success',
   },
   priority: {
